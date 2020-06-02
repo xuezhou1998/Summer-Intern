@@ -1,52 +1,28 @@
+This is a tensorflow deep learning inception_v3 model customized for "Fundus Image Analysis for Diabetic Retinopathy and Macular edema Grading". 
+The project is mainly a deep learning model that performs disease screening and diagnosis for diabetes by analyzing the images of human eye retina. The image data are downloaded from IDRiD: Diabetic Retinopathy, and are already converted into TFRecord data.
+The code in this project is based on the open source inception_v3 model created by PanJinQuan in https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwiC3O-RwOLpAhWlgnIEHSDvBzgQFjABegQICRAB&url=https%3A%2F%2Fgithub.com%2FPanJinquan%2Ftensorflow_models_learning%3Ffiles%3D1&usg=AOvVaw0u3kTPsnzqYme0soikuJSr.
+
 # tensorflow_models_learning
-> 老铁要是觉得不错，给个“star”
-## 1.生成record训练数据
-dataset已经包含了训练和测试的图片，请直接运行create_tf_record.py</br>
-> 对于InceptionNet V1:设置resize_height和resize_width = 224 </br>
-> 对于InceptionNet V3:设置resize_height和resize_width = 299 </br>
-> 其他模型，请根据输入需要设置resize_height和resize_width的大小</br>
 
-```
-if __name__ == '__main__':
-    # 参数设置
-    resize_height = 224  # 指定存储图片高度
-    resize_width = 224  # 指定存储图片宽度
-    shuffle=True
-    log=5
-    # 产生train.record文件
-    image_dir='dataset/train'
-    train_labels = 'dataset/train.txt'  # 图片路径
-    train_record_output = 'dataset/record/train{}.tfrecords'.format(resize_height)
-    create_records(image_dir,train_labels, train_record_output, resize_height, resize_width,shuffle,log)
-    train_nums=get_example_nums(train_record_output)
-    print("save train example nums={}".format(train_nums))
+## 1. Create TFRecord Data
+The images are contained in the dataset directory. To create TFRecord, run create_tf_record.py</br>
+> For InceptionNet V1:set resize_height and resize_width = 224 </br>
+> For InceptionNet V3:set resize_height and resize_width = 299 </br>
 
-    # 产生val.record文件
-    image_dir='dataset/val'
-    val_labels = 'dataset/val.txt'  # 图片路径
-    val_record_output = 'dataset/record/val{}.tfrecords'.format(resize_height)
-    create_records(image_dir,val_labels, val_record_output, resize_height, resize_width,shuffle,log)
-    val_nums=get_example_nums(val_record_output)
-    print("save val example nums={}".format(val_nums))
 
-    # 测试显示函数
-    # disp_records(train_record_output,resize_height, resize_width)
-    batch_test(train_record_output,resize_height, resize_width)
 
-```
-## 2.训练过程
-目前提供VGG、inception_v1、inception_v3、mobilenet_v以及resnet_v1的训练文件，只需要生成tfrecord数据，即可开始训练
-> 训练VGG请直接运行：vgg_train_val.py </br>
-> 训练inception_v1请直接运行：inception_v1_train_val.py </br>
-> 训练inception_v3请直接运行：inception_v3_train_val.py </br>
-> 训练mobilenet_v1请直接运行：mobilenet_train_val.py </br>
-> 其他模型，请参考训练文件进行修改</br>
+## 2.Training
 
-## 3.资源下载
-- 本项目详细说明，请参考鄙人博客资料：
-> 《使用自己的数据集训练GoogLenet InceptionNet V1 V2 V3模型》: https://panjinquan.blog.csdn.net/article/details/81560537 </br>
-> 《tensorflow实现将ckpt转pb文件》: https://panjinquan.blog.csdn.net/article/details/82218092 </br>
-> 《使用自己的数据集训练MobileNet、ResNet实现图像分类（TensorFlow）》https://panjinquan.blog.csdn.net/article/details/88252699
-> 预训练模型下载地址: https://download.csdn.net/download/guyuealian/10610847  </br>
-- 老铁要是觉得不错，给个“star”
-- tensorflow-gpu==1.4.0
+There are VGG, inception_v1, inception_v3, mobilenet_v and resnet_v1 documents for training. To begin with, first generate TFRecord data and start training.
+> VGG training：vgg_train_val.py </br>
+
+> inception_v1 training：inception_v1_train_val.py </br>
+> inception_v3 training：inception_v3_train_val.py </br>
+> mobilenet training：mobilenet_train_val.py </br>
+
+## 3. Pre-trained Model
+The inception_v3 model pre-trained with the image data downloaded from IDRiD, can be found at the model directory. 
+
+
+
+
