@@ -8,7 +8,24 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as nps
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+from tensorflow.keras.backend import set_session
+
 import matplotlib.pyplot as plt
+
+
+#https://towardsdatascience.com/image-classification-python-keras-tutorial-kaggle-challenge-45a6332a58b8
+
+
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
+
+import tensorflow as tf
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+config.log_device_placement = False  # to log device placement (on which device the operation ran)
+sess = tf.Session(config=config)
+set_session(sess)  # set this TensorFlow session as the default session for Keras
 
 BS=8
 trdata = ImageDataGenerator(rotation_range=20, zoom_range=0.15,
@@ -41,7 +58,9 @@ model.add(tf.keras.layers.Dense(128, activation='relu'))
 model.add(tf.keras.layers.Dropout(0.3))
 model.add(tf.keras.layers.Dense(2, activation = 'softmax'))
 
-opt = Adam(lr=0.001)
+opt = opt = tf.keras.optimizers.RMSprop(
+    learning_rate=0.0001
+)
 model.compile(optimizer=opt, loss=keras.losses.sparse_categorical_crossentropy, metrics=['accuracy'])
 
 model.summary()
@@ -50,11 +69,11 @@ model.summary()
 filenames = traindata.filenames
 nb_samples = len(filenames)
 
-model=tf.keras.models.load_model('./binary_classification.h5')
+model=tf.keras.models.load_model('./binary_classification_thread2.h5')
 
-checkpoint = ModelCheckpoint("binary_classification.h5", monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
-early = EarlyStopping(monitor='val_acc', min_delta=0, patience=20, verbose=1, mode='auto')
-hist = model.fit_generator(steps_per_epoch=nb_samples//BS,generator=traindata, validation_data= valdata, validation_steps=10,epochs=300,shuffle=True, callbacks=[checkpoint])
+checkpoint = ModelCheckpoint("binary_classification_thread2.h5", monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
+#early = EarlyStopping(monitor='val_acc', min_delta=0, patience=20, verbose=1, mode='auto')
+hist = model.fit_generator(steps_per_epoch=nb_samples//BS,generator=traindata, validation_data= valdata, validation_steps=20,epochs=300,shuffle=True, callbacks=[checkpoint])
 
 
 
